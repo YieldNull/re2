@@ -15,15 +15,15 @@ const (
 	TypeMatch rune = -2
 )
 
-func Char(char rune, out *State) *State {
+func newChar(char rune, out *State) *State {
 	return &State{char: char, out: out}
 }
 
-func Split(out *State, out2 *State) *State {
+func newSplit(out *State, out2 *State) *State {
 	return &State{char: TypeSplit, out: out, out2: out2}
 }
 
-func Match() *State {
+func newMatch() *State {
 	return &State{char: TypeMatch}
 }
 
@@ -64,7 +64,7 @@ func post2nfa(re string) (_ *State, err error) {
 		default:
 			//     a
 			// O ---->
-			s := Char(char, nil)
+			s := newChar(char, nil)
 			stack.Push(&Frag{
 				start: s,
 				outs:  []**State{&s.out},
@@ -91,7 +91,7 @@ func post2nfa(re string) (_ *State, err error) {
 			//     | --------------------->
 			//
 			f, _ := stack.Pop()
-			split := Split(f.start, nil)
+			split := newSplit(f.start, nil)
 
 			stack.Push(&Frag{
 				start: split,
@@ -104,7 +104,7 @@ func post2nfa(re string) (_ *State, err error) {
 			//            ↑           |
 			//            |-----------|
 			f, _ := stack.Pop()
-			s := Split(f.start, nil)
+			s := newSplit(f.start, nil)
 			for _, o := range f.outs {
 				*o = s
 			}
@@ -122,7 +122,7 @@ func post2nfa(re string) (_ *State, err error) {
 			//     |
 			//     |---------------------->
 			f, _ := stack.Pop()
-			s := Split(f.start, nil)
+			s := newSplit(f.start, nil)
 			for _, o := range f.outs {
 				*o = s
 			}
@@ -141,7 +141,7 @@ func post2nfa(re string) (_ *State, err error) {
 			//            +----------+
 			f1, _ := stack.Pop()
 			f2, _ := stack.Pop()
-			s := Split(f1.start, f2.start)
+			s := newSplit(f1.start, f2.start)
 
 			stack.Push(&Frag{
 				start: s,
@@ -151,7 +151,7 @@ func post2nfa(re string) (_ *State, err error) {
 	}
 
 	f, _ := stack.Pop()
-	m := Match()
+	m := newMatch()
 	for _, o := range f.outs {
 		*o = m
 	}
