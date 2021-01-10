@@ -10,7 +10,7 @@ func (l *List) add(s *State) {
 		return
 	}
 
-	if s.char == TypeSplit {
+	if s.char == CharSplit {
 		l.add(s.out)
 		l.add(s.out2)
 	} else {
@@ -27,11 +27,11 @@ func (l *List) step(c rune) *List {
 
 	for _, s := range l.states {
 		switch s.char {
-		case TypeSplit:
+		case CharSplit:
 			lst.add(s)
-		case TypeMatch:
+		case CharMatch:
 		default:
-			if s.char == c {
+			if s.char == c || s.char == '.' {
 				lst.add(s.out)
 			}
 		}
@@ -53,7 +53,7 @@ func (l *List) flow() *List {
 
 func (l *List) isMatch() bool {
 	for _, s := range l.states {
-		if s.char == TypeMatch {
+		if s.char == CharMatch {
 			return true
 		}
 	}

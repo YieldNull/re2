@@ -43,7 +43,7 @@ func Draw(s *State, path string) (err error) {
 			idx++
 			newNode = n
 
-			if s.char == TypeMatch {
+			if s.char == CharMatch {
 				n.SetShape(cgraph.DoubleCircleShape)
 			} else {
 				n.SetShape(cgraph.CircleShape)

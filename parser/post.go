@@ -5,12 +5,12 @@ import (
 )
 
 var priority = map[rune]int{
-	'*': 4,
-	'+': 4,
-	'?': 4,
-	'.': 3,
-	'|': 2,
-	'(': 1,
+	'*':        4,
+	'+':        4,
+	'?':        4,
+	CharConcat: 3,
+	'|':        2,
+	'(':        1,
 }
 
 type runeStack []rune
@@ -61,7 +61,7 @@ func transform(re string) string {
 			case '(', '|':
 				chars = append(chars, c)
 			default:
-				chars = append(chars, '.', c)
+				chars = append(chars, CharConcat, c)
 			}
 		}
 	}
@@ -75,7 +75,7 @@ func re2post(re string) (post string, err error) {
 
 	for _, c := range re {
 		switch c {
-		case '+', '*', '?', '|', '.':
+		case '+', '*', '?', '|', CharConcat:
 			for {
 				if op, ok := operator.Peek(); ok && priority[op] >= priority[c] {
 					op, _ = operator.Pop()

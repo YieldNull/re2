@@ -12,21 +12,16 @@ type State struct {
 	ListId int
 }
 
-const (
-	TypeSplit rune = -1
-	TypeMatch rune = -2
-)
-
 func newChar(char rune, out *State) *State {
 	return &State{char: char, out: out}
 }
 
 func newSplit(out *State, out2 *State) *State {
-	return &State{char: TypeSplit, out: out, out2: out2}
+	return &State{char: CharSplit, out: out, out2: out2}
 }
 
 func newMatch() *State {
-	return &State{char: TypeMatch}
+	return &State{char: CharMatch}
 }
 
 type Frag struct {
@@ -71,7 +66,7 @@ func post2nfa(re string) (_ *State, err error) {
 				start: s,
 				outs:  []**State{&s.out},
 			})
-		case '.':
+		case CharConcat:
 			//      +----------+      +----------+
 			// ---> |---Frag---| ---> |---Frag---| --->
 			//      +----------+      +----------+
