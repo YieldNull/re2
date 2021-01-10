@@ -8,6 +8,8 @@ type State struct {
 	char rune
 	out  *State
 	out2 *State
+
+	ListId int
 }
 
 const (
